@@ -3,7 +3,7 @@ import pandas as pd
 from pycaret.classification import load_model, predict_model
 import base64  # necesario para codificar la imagen
 
-# 🌄 Función para establecer imagen de fondo local con filtro oscuro
+# Función para establecer imagen de fondo local con filtro oscuro
 def set_bg_local(image_file):
     with open(image_file, "rb") as img:
         encoded = base64.b64encode(img.read()).decode()
@@ -25,7 +25,7 @@ def set_bg_local(image_file):
 # 🔁 Fondo con imagen local
 set_bg_local("Campo drone.jpg")
 
-# 🎨 Estilo para la barra superior y sidebar
+#  Estilo para la barra superior y sidebar
 st.markdown(
     """
     <style>
@@ -40,7 +40,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# 📦 Cargar modelo
+#  Cargar modelo
 model = load_model("modelo_recomendacion_cultivo")
 
 # 🌾 Diccionario de traducción
@@ -59,7 +59,7 @@ cultivo_dict = {
     'Wheat': 'Trigo'
 }
 
-# 🧾 Formulario
+#  Formulario
 st.title("Recomendación de cultivo")
 st.write("Completá los datos del suelo y clima para obtener el cultivo más adecuado.")
 
@@ -75,7 +75,7 @@ soilcolor = st.selectbox("Color del suelo", [
     'Soilcolor_Dark brown', 'Soilcolor_Reddish brown', 'Soilcolor_dark gray', 'Soilcolor_brown'
 ])
 
-# 🔍 Predicción
+#  Predicción
 if st.button("🔍 Predecir cultivo recomendado"):
     # 🧪 Crear input_data y completar columnas
     input_data = pd.DataFrame({
@@ -101,7 +101,7 @@ if st.button("🔍 Predecir cultivo recomendado"):
     pred_score = prediction['prediction_score'][0]
     cultivo_es = cultivo_dict.get(pred_label, pred_label)
 
-    # 🎯 Resultado en tarjeta
+    #  Resultado en tarjeta
     st.markdown(f"""
     <div style="padding: 1rem; border-radius: 10px; background-color: #1e1e1e; color: white; font-size: 18px; text-align: center;">
     🌾 <b>Cultivo recomendado:</b> {cultivo_es} <br> 
@@ -109,12 +109,12 @@ if st.button("🔍 Predecir cultivo recomendado"):
     </div>
     """, unsafe_allow_html=True)
 
-    # 🔁 Botón de reinicio
+    #  Botón de reinicio
     st.markdown("---")
     if st.button("🔁 Nueva consulta"):
         st.experimental_rerun()
 
-# 🖋 Pie de página
+#  Pie de página
 st.markdown("""
 <hr style="margin-top: 2rem;">
 <div style="text-align: center; font-size: 12px; color: gray;">
