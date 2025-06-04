@@ -1,9 +1,9 @@
 import streamlit as st
 import pandas as pd
 from pycaret.classification import load_model, predict_model
-import base64  # necesario para codificar la imagen
+import base64
 
-# Función para establecer imagen de fondo local con filtro oscuro
+# Imagen de fondo
 def set_bg_local(image_file):
     with open(image_file, "rb") as img:
         encoded = base64.b64encode(img.read()).decode()
@@ -22,12 +22,10 @@ def set_bg_local(image_file):
         unsafe_allow_html=True
     )
 
-# 🔁 Fondo con imagen local
 set_bg_local("Campo drone.jpg")
 
-#  Estilo para la barra superior y sidebar
-st.markdown(
-    """
+# Estilo barra superior
+st.markdown("""
     <style>
     header[data-testid="stHeader"] {
         background-color: #262730;
@@ -36,88 +34,109 @@ st.markdown(
         background-color: #262730;
     }
     </style>
+""", unsafe_allow_html=True)
+
+st.markdown(
+    """
+    <style>
+    /* Track (barra del slider) */
+    .stSlider > div[data-baseweb="slider"] > div > div:nth-child(1) {
+        background: #2e7d32 !important;
+    }
+    /* Handle (circulito del slider) */
+    .stSlider > div[data-baseweb="slider"] > div > div:nth-child(2) {
+        background: #2e7d32 !important;
+        border: none !important;
+    }
+    /* Línea completa de fondo */
+    .stSlider > div[data-baseweb="slider"] > div > div:nth-child(3) {
+        background: rgba(255,255,255,0.1) !important;
+    }
+    /* Valor del slider */
+    .stSlider label {
+        color: white !important;
+    }
+     /* Botón */
+    .stButton > button {
+        background-color: #2e7d32 !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 8px !important;
+        padding: 0.6em 1.2em !important;
+        font-weight: bold !important;
+        transition: background-color 0.3s ease !important;
+    }
+    .stButton > button:hover {
+        background-color: #1b5e20 !important;
+    }
+    </style>
     """,
     unsafe_allow_html=True
 )
 
-#  Cargar modelo
-model = load_model("modelo_recomendacion_cultivo")
 
-# 🌾 Diccionario de traducción
+# Cargar modelo y diccionario
+model = load_model("modelo_recomendacion_cultivo")
 cultivo_dict = {
-    'Barley': 'Cebada',
-    'Bean': 'Poroto',
-    'Dagussa': 'Mijo etíope',
-    'Fallow': 'Barbecho',
-    'Maize': 'Maíz',
-    'Niger seed': 'Semilla de niger',
-    'Pea': 'Arveja',
-    'Potato': 'Papa',
-    'Red Pepper': 'Ají rojo',
-    'Sorghum': 'Sorgo',
-    'Teff': 'Teff',
-    'Wheat': 'Trigo'
+    'Barley': 'Cebada', 'Bean': 'Poroto', 'Dagussa': 'Mijo etíope', 'Fallow': 'Barbecho',
+    'Maize': 'Maíz', 'Niger seed': 'Semilla de niger', 'Pea': 'Arveja', 'Potato': 'Papa',
+    'Red Pepper': 'Ají rojo', 'Sorghum': 'Sorgo', 'Teff': 'Teff', 'Wheat': 'Trigo'
 }
 
-#  Formulario
-st.title("Recomendación de cultivo")
-st.write("Completá los datos del suelo y clima para obtener el cultivo más adecuado.")
+# Título principal con espaciado
+st.markdown("<br><h1 style='text-align: center; color: white;'> Recomendación de cultivo</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: white;'>Completá los datos del suelo y clima para obtener el cultivo más adecuado.</p>", unsafe_allow_html=True)
 
-ph = st.slider("pH del suelo", 3.0, 9.0, 6.5)
-k = st.number_input("Potasio (K)", min_value=0, value=100)
-p = st.number_input("Fósforo (P)", min_value=0, value=30)
-n = st.number_input("Nitrógeno (N)", min_value=0, value=50)
-zn = st.number_input("Zinc (Zn)", min_value=0.0, value=1.0)
-s = st.number_input("Azufre (S)", min_value=0.0, value=10.0)
-qv2m_w = st.slider("Humedad relativa invierno (QV2M-W)", 0.0, 1.0, 0.5)
-t2m_max_sp = st.slider("Temp. máx. primavera (T2M_MAX-Sp)", 10.0, 45.0, 28.0)
+# Agrupar secciones
+st.subheader("🔬 Datos del suelo")
+ph = st.slider("pH del suelo (escala 0–14)", 3.0, 9.0, 6.5)
+k = st.number_input("Potasio – mg/kg", min_value=0, value=100)
+p = st.number_input("Fósforo – mg/kg", min_value=0, value=30)
+n = st.number_input("Nitrógeno – mg/kg", min_value=0, value=50)
+zn = st.number_input("Zinc – mg/kg", min_value=0.0, value=1.0)
+s = st.number_input("Azufre – mg/kg", min_value=0.0, value=10.0)
 soilcolor = st.selectbox("Color del suelo", [
     'Soilcolor_Dark brown', 'Soilcolor_Reddish brown', 'Soilcolor_dark gray', 'Soilcolor_brown'
 ])
 
-#  Predicción
-if st.button("🔍 Predecir cultivo recomendado"):
-    # 🧪 Crear input_data y completar columnas
-    input_data = pd.DataFrame({
-        'Ph': [ph],
-        'K': [k],
-        'P': [p],
-        'N': [n],
-        'Zn': [zn],
-        'S': [s],
-        'QV2M-W': [qv2m_w],
-        'T2M_MAX-Sp': [t2m_max_sp],
-        soilcolor: [1]
-    })
+st.subheader("🌤️ Datos climáticos")
+qv2m_w = st.slider("Humedad relativa en invierno – proporción", 0.0, 1.0, 0.5)
+t2m_max_sp = st.slider("Temperatura máxima en primavera (°C)", 10.0, 45.0, 28.0)
 
-    expected_cols = [col for col in model.feature_names_in_ if col != 'label']
-    for col in expected_cols:
-        if col not in input_data.columns:
-            input_data[col] = 0
-    input_data = input_data[expected_cols]
+# Botón centrado
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    if st.button("🚀 Obtener recomendación de cultivo"):
+        input_data = pd.DataFrame({
+            'Ph': [ph], 'K': [k], 'P': [p], 'N': [n], 'Zn': [zn], 'S': [s],
+            'QV2M-W': [qv2m_w], 'T2M_MAX-Sp': [t2m_max_sp], soilcolor: [1]
+        })
 
-    prediction = predict_model(model, data=input_data)
-    pred_label = prediction['prediction_label'][0]
-    pred_score = prediction['prediction_score'][0]
-    cultivo_es = cultivo_dict.get(pred_label, pred_label)
+        expected_cols = [col for col in model.feature_names_in_ if col != 'label']
+        for col in expected_cols:
+            if col not in input_data.columns:
+                input_data[col] = 0
+        input_data = input_data[expected_cols]
 
-    #  Resultado en tarjeta
-    st.markdown(f"""
-    <div style="padding: 1rem; border-radius: 10px; background-color: #1e1e1e; color: white; font-size: 18px; text-align: center;">
-    🌾 <b>Cultivo recomendado:</b> {cultivo_es} <br> 
-    ✅ <b>Confianza:</b> {pred_score:.0%}
-    </div>
-    """, unsafe_allow_html=True)
+        prediction = predict_model(model, data=input_data)
+        pred_label = prediction['prediction_label'][0]
+        pred_score = prediction['prediction_score'][0]
+        cultivo_es = cultivo_dict.get(pred_label, pred_label)
 
-    #  Botón de reinicio
-    st.markdown("---")
-    if st.button("🔁 Nueva consulta"):
-        st.experimental_rerun()
+        # Resultado visual
+        st.markdown(f"""
+        <div style="background-color:  #2e7d32; padding: 1rem; border-radius: 10px; text-align: center;">
+            <h3>🌾 Cultivo recomendado: <b>{cultivo_es}</b></h3>
+            <p>✅ Confianza del modelo: <b>{pred_score:.0%}</b></p>
+        </div>
+        """, unsafe_allow_html=True)
 
-#  Pie de página
+# Pie con LinkedIn
 st.markdown("""
 <hr style="margin-top: 2rem;">
 <div style="text-align: center; font-size: 12px; color: gray;">
- <b>Melisa Cardozo</b> • 2025
+Desarrollado por <b>Melisa Cardozo</b> – 2025 · <a href='https://www.linkedin.com/in/melisacardozo' target='_blank'>LinkedIn</a>
 </div>
 """, unsafe_allow_html=True)
+
+
