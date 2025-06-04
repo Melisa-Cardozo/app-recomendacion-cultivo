@@ -35,7 +35,7 @@ Ayudar a pequeños y medianos productores a tomar decisiones más informadas sob
 
 ## 📷 Vista previa de la app
 
-![Vista de la app funcionando](vista_app.png)
+![Vista de la app funcionando](vista_app.jpg)
 
 ---
 
