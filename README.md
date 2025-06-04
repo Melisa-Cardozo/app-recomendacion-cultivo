@@ -33,6 +33,16 @@ Ayudar a pequeños y medianos productores a tomar decisiones más informadas sob
 
 ---
 
+## 📊 Fuente de datos
+
+Este proyecto fue desarrollado utilizando el dataset [Crop Recommendation using Soil Properties and Weather Prediction](https://data.mendeley.com/datasets/8v757rr4st/1), publicado por Sltanu Alemu en Mendeley Data.
+
+El conjunto de datos combina información de propiedades del suelo (como pH, nutrientes, conductividad eléctrica) y condiciones climáticas (temperatura, humedad, precipitación, entre otros), recopilados de diversas fuentes, incluyendo la infraestructura en la nube de la NASA y agencias agrícolas etíopes.
+
+Los datos fueron utilizados con fines académicos y de demostración.
+
+---
+
 ## 📷 Vista previa de la app
 
 ![Vista de la app funcionando](vista_app.png)
