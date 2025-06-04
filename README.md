@@ -57,4 +57,4 @@ Economista | Estudiante de Maestría en Ciencia de Datos | Apasionada por el agr
 
 ---
 
-📌 Este proyecto fue desarrollado con fines académicos y de portafolio.
+📌 Este proyecto fue desarrollado con fines académicos y de portafolio. 
