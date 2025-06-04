@@ -54,3 +54,7 @@ Los datos fueron utilizados con fines académicos y de demostración.
 Melisa Cardozo  
 Economista | Estudiante de Maestría en Ciencia de Datos | Apasionada por el agro y la sustentabilidad  
 🔗 [LinkedIn](https://www.linkedin.com/in/melisacardozo)
+
+---
+
+📌 Este proyecto fue desarrollado con fines académicos y de portafolio.
